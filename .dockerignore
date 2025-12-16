@@ -1,0 +1,8 @@
+*
+!.devcontainer/
+!gradle/
+!gradlew
+!build.gradle
+!settings.gradle
+!gradle.properties
+!build/

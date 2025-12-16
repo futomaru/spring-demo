@@ -1,0 +1,12 @@
+name: spring-demo-devcontainer
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace
+      - /var/run/docker.sock:/var/run/docker.sock
+    tty: true
+    ports:
+      - 8080:8080
