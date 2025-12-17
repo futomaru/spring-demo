@@ -29,7 +29,7 @@ public interface ItemRepository {
 
     @Insert("INSERT INTO items(name, price, description) VALUES(#{name}, #{price}, #{description})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    Item save(Item item);
+    int save(Item item);
 
     @Update("UPDATE items SET name = #{name}, price = #{price}, description = #{description} WHERE id = #{id}")
     int update(Item item);

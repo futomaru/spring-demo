@@ -36,12 +36,17 @@ public class ItemsService {
 
     @Tool(description = "新しいアイテムを登録する")
     public String registerItem(@ToolParam(description = "登録するアイテムの名前、価格、説明") ItemRequest request) {
-        if (request == null || isBlank(request.name()) || request.price() == null || request.price() < 0) {
-            return "アイテムの名前、もしくは価格が不正です";
+        Item item = new Item(
+                null,
+                request.getName().trim(),
+                request.getPrice(),
+                blankToNull(request.getDescription()));
+
+        if (repository.save(item) == 0) {
+            return "アイテムの登録に失敗しました";
+        } else {
+            return "アイテムを登録しました: " + formatItem(item);
         }
-        Item saved = repository
-                .save(new Item(null, request.name().trim(), request.price(), blankToNull(request.description())));
-        return "アイテムを登録しました: " + formatItem(saved);
     }
 
     @Tool(description = "指定されたIDのアイテムを削除する")
