@@ -1,4 +1,4 @@
-# spring-demo
+# spring-ai-demo
 
 Spring Boot と Spring AI を組み合わせた、AI ツール（MCP）経由で CRUD を操作するサンプルです。
 
