@@ -3,8 +3,8 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.demo.client.ClientStdio;
 import com.example.demo.model.Item;
-import com.example.demo.model.ItemRequest;
 import com.example.demo.repository.ItemRepository;
 
 import org.springframework.ai.tool.annotation.Tool;
@@ -22,7 +22,7 @@ public class ItemsService {
 
     @Tool(description = "すべてのアイテムのリストを取得する")
     public String listItems() {
-        return formatItems("在庫", repository.findAll());
+        return formatItems("アイテムリスト", repository.findAll());
     }
 
     @Tool(description = "指定されたテキストが名前に含まれるアイテムを検索する")
@@ -35,31 +35,47 @@ public class ItemsService {
     }
 
     @Tool(description = "新しいアイテムを登録する")
-    public String registerItem(@ToolParam(description = "登録するアイテムの名前、価格、説明") ItemRequest request) {
-        Item item = new Item(
-                null,
-                request.getName().trim(),
-                request.getPrice(),
-                blankToNull(request.getDescription()));
-
+    public String registerItem(@ToolParam(description = "登録するアイテムの名前、価格、説明") Item item) {
         if (repository.save(item) == 0) {
             return "アイテムの登録に失敗しました";
-        } else {
-            return "アイテムを登録しました: " + formatItem(item);
         }
+        return "アイテムを登録しました: " + formatItem(item);
     }
 
     @Tool(description = "指定されたIDのアイテムを削除する")
     public String removeItem(@ToolParam(description = "削除するアイテムのID") Long id) {
         if (id == null) {
-            return "削除するアイテムのIDが必要です";
+            return "削除するアイテムのIDを入力してください";
         }
         Item existing = repository.findById(id);
         if (existing == null) {
             return "IDが " + id + " のアイテムが見つかりません";
         }
-        repository.deleteById(id);
+        if (repository.deleteById(id) == 0) {
+            return "アイテムの削除に失敗しました";
+        }
         return "アイテムを削除しました: " + formatItem(existing);
+    }
+
+    @Tool(description = "既存のアイテムを更新する")
+    public String updateItem(@ToolParam(description = "更新するアイテムのID、名前、価格、説明") Item item) {
+        if (item.getId() == null) {
+            return "更新するアイテムのIDを入力してください";
+        }
+        Item existing = repository.findById(item.getId());
+        if (existing == null) {
+            return "IDが " + item.getId() + " のアイテムが見つかりません";
+        }
+        Item updated = new Item(
+                item.getId(),
+                item.getName() != null ? item.getName().trim() : existing.getName(),
+                item.getPrice() != null ? item.getPrice() : existing.getPrice(),
+                blankToNull(item.getDescription()) != null ? blankToNull(item.getDescription())
+                        : existing.getDescription());
+        if (repository.update(updated) == 0) {
+            return "アイテムの更新に失敗しました";
+        }
+        return "アイテムを更新しました: " + formatItem(updated);
     }
 
     private String formatItems(String heading, List<Item> items) {

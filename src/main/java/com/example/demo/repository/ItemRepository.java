@@ -25,7 +25,7 @@ public interface ItemRepository {
     Item findById(Long id);
 
     @Delete("DELETE FROM items WHERE id = #{id}")
-    void deleteById(Long id);
+    int deleteById(Long id);
 
     @Insert("INSERT INTO items(name, price, description) VALUES(#{name}, #{price}, #{description})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
