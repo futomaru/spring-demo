@@ -11,11 +11,11 @@ import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ItemsService {
+public class ItemService {
 
     private final ItemRepository repository;
 
-    public ItemsService(ItemRepository repository) {
+    public ItemService(ItemRepository repository) {
         this.repository = repository;
     }
 
@@ -35,6 +35,7 @@ public class ItemsService {
 
     @Tool(description = "新しいアイテムを登録する")
     public String registerItem(@ToolParam(description = "登録するアイテムの名前、価格、説明") Item item) {
+        item.setId(null);
         if (repository.save(item) == 0) {
             return "アイテムの登録に失敗しました";
         }

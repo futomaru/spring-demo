@@ -5,7 +5,7 @@ import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import com.example.demo.service.ItemsService;
+import com.example.demo.service.ItemService;
 
 @SpringBootApplication
 public class McpServerApplication {
@@ -15,7 +15,7 @@ public class McpServerApplication {
 	}
 
 	@Bean
-	public ToolCallbackProvider itemTools(ItemsService itemsService) {
+	public ToolCallbackProvider itemTools(ItemService itemsService) {
 		return MethodToolCallbackProvider.builder().toolObjects(itemsService).build();
 	}
 }

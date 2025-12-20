@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
-import com.example.demo.service.ItemsService;
+import com.example.demo.service.ItemService;
 
 @SpringBootTest
 @DisplayName("MCP Tool Registration Test")
@@ -20,7 +20,7 @@ class McpToolRegistrationTest {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private ItemsService itemsService;
+    private ItemService itemService;
 
     @Test
     @DisplayName("MCPツール登録確認 - Beanが存在する")
@@ -30,9 +30,9 @@ class McpToolRegistrationTest {
     }
 
     @Test
-    @DisplayName("ItemsServiceがSpringコンテキストに登録されている")
-    void testItemsServiceBean() {
-        ItemsService service = applicationContext.getBean(ItemsService.class);
+    @DisplayName("ItemServiceがSpringコンテキストに登録されている")
+    void testItemServiceBean() {
+        ItemService service = applicationContext.getBean(ItemService.class);
         assertNotNull(service);
     }
 
@@ -41,7 +41,7 @@ class McpToolRegistrationTest {
     void testMethodToolCallbackProvider() {
         // ToolCallbackProvider を作成
         ToolCallbackProvider provider = MethodToolCallbackProvider.builder()
-                .toolObjects(itemsService)
+                .toolObjects(itemService)
                 .build();
 
         assertNotNull(provider);
@@ -59,11 +59,11 @@ class McpToolRegistrationTest {
     void testAllToolMethodsImplemented() {
         // リフレクションでメソッドの存在確認
         try {
-            assertNotNull(ItemsService.class.getMethod("listItems"));
-            assertNotNull(ItemsService.class.getMethod("searchItemsByName", String.class));
-            assertNotNull(ItemsService.class.getMethod("registerItem", com.example.demo.model.Item.class));
-            assertNotNull(ItemsService.class.getMethod("updateItem", com.example.demo.model.Item.class));
-            assertNotNull(ItemsService.class.getMethod("removeItem", Long.class));
+            assertNotNull(ItemService.class.getMethod("listItems"));
+            assertNotNull(ItemService.class.getMethod("searchItemsByName", String.class));
+            assertNotNull(ItemService.class.getMethod("registerItem", com.example.demo.model.Item.class));
+            assertNotNull(ItemService.class.getMethod("updateItem", com.example.demo.model.Item.class));
+            assertNotNull(ItemService.class.getMethod("removeItem", Long.class));
         } catch (NoSuchMethodException e) {
             fail("ツールメソッドが見つかりません: " + e.getMessage());
         }

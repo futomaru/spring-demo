@@ -2,13 +2,7 @@ package com.example.demo.repository;
 
 import com.example.demo.model.Item;
 import java.util.List;
-
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface ItemRepository {
@@ -19,13 +13,13 @@ public interface ItemRepository {
     List<Item> findAll();
 
     @Select(BASE_SELECT + " WHERE name LIKE CONCAT('%', #{name}, '%') ORDER BY id")
-    List<Item> findByName(String name);
+    List<Item> findByName(@Param("name") String name);
 
     @Select(BASE_SELECT + " WHERE id = #{id}")
-    Item findById(Long id);
+    Item findById(@Param("id") Long id);
 
     @Delete("DELETE FROM items WHERE id = #{id}")
-    int deleteById(Long id);
+    int deleteById(@Param("id") Long id);
 
     @Insert("INSERT INTO items(name, price, description) VALUES(#{name}, #{price}, #{description})")
     @Options(useGeneratedKeys = true, keyProperty = "id")

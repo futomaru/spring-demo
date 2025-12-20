@@ -11,14 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.demo.model.Item;
 import com.example.demo.repository.ItemRepository;
-import com.example.demo.service.ItemsService;
+import com.example.demo.service.ItemService;
 
 @SpringBootTest
 @DisplayName("MCP Server Integration Test")
 class McpServerIntegrationTest {
 
     @Autowired
-    private ItemsService service;
+    private ItemService service;
 
     @Autowired
     private ItemRepository repository;
